@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 class Main{
     static class Node<T> {
         public T data;
@@ -30,6 +29,9 @@ class Main{
         public SinglyLinkedList(){
             this.head=null;
         }
+        public boolean isEmpty(){
+            return head==null;
+        }
 
         public void pushFront(Node data){
             data.setNext(head);
@@ -37,22 +39,42 @@ class Main{
         }
         public void pushBack(Node data){
             Node start = head;
-            if(start==null){
-                data.setNext(head);
-                this.head = data;
+            if(head==null){
+                head =data;
             }else{
                 while(start.next!=null){
                     start = start.next;
                 }
+                //System.out.print("this is the data: ");
+                //System.out.println(data.data);
                 start.next = data;
             }
         }
-        public void popFront(){
+
+        public Node popFront(){
+            Node returned = null;
             if(head==null){
                 System.out.println("Can't pop. List is empty");
             }else{
-                head = head.getNext();
+                returned = head;
+                head = head.next;
             }
+            return returned;
+        }
+        public Node popBack(){
+            Node returned = null;
+            Node start = head;
+            if(head==null || head.next==null){
+                returned = head;
+                head=null;
+            } else{
+                while(start.next.next!=null){
+                    start = start.next;
+                }
+                returned=start.next;
+                start.next =null;
+            }
+            return returned;
         }
 
         public void imprimir(){
@@ -82,6 +104,19 @@ class Main{
         for(String a:input){
             ogList.pushBack(new Node(a));
         }
-        ogList.imprimir();
+        SinglyLinkedList<String> copyList = new SinglyLinkedList<>();
+
+        while(!ogList.isEmpty()){
+            Node popedFront;
+            Node popedBack;
+            popedFront = ogList.popFront();
+            popedFront.next=null;
+            popedBack = ogList.popBack();
+
+            copyList.pushBack(popedFront);
+            copyList.pushBack(popedBack);
+        }
+        copyList.imprimir();
+
     }
 }
